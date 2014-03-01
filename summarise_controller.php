@@ -16,7 +16,7 @@
   {
     global $mysqli,$user, $session, $route;
 
-    require "Modules/summarise/summarise_model.php";
+   // require "Modules/summarise/summarise_model.php";
     include "Modules/summarise/summarise_model.php";
    // require "summarise_model.php";
     $summary = new Summary($mysqli);

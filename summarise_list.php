@@ -7,7 +7,7 @@
  */
 ?>
 
-<?php if (!sumamry_list) { ?>
+<?php if (!$summary_list) { ?>
 <div class="alert alert-block">
 <h4 class="alert-heading">No summaries created</h4>
 <p>To add an event based notification:</p>
