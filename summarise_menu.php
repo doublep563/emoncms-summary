@@ -9,5 +9,5 @@
   bindtextdomain($domain, "Modules/feed/locale");
   bind_textdomain_codeset($domain, 'UTF-8');
  
-  $menu_dropdown[] = array('name'=>"Summarise", 'path'=>"summarise/check_table_exists" , 'session'=>"write", 'order' => 11 );
+  $menu_dropdown[] = array('name'=>"Summarise", 'path'=>"summary/check_table_exists" , 'session'=>"write", 'order' => 11 );
 ?>
