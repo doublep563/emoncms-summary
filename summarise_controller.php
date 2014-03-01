@@ -17,7 +17,7 @@
     global $mysqli,$user, $session, $route;
 
    // require "Modules/summarise/summarise_model.php";
-    include "Modules/summarise/summarise_model.php";
+    include "Modules/summary/summarise_model.php";
    // require "summarise_model.php";
     $summary = new Summary($mysqli);
 
@@ -25,7 +25,7 @@
     if ($session['write'])
     {
       $list = $summary->check_table_exists();
-      $result = view("Modules/summarise/summarise_list.php", array('summary_list'=>$list));
+      $result = view("Modules/summary/summarise_list.php", array('summary_list'=>$list));
     }
 
     return array('content'=>$result);
