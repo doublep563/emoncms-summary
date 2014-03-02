@@ -16,8 +16,9 @@
 <?php } else { ?>
 <div class="alert alert-block">
 <h4 class="alert-heading">Get a list of feeds</h4>
-<p> Select * from feeds:</p>
+<p> Select * from feeds and drop feeds that are in the summary table:</p>
 <h4 class="alert-heading">Get a list of summary feeds</h4>
 <p> Select * from feed_summary_list:</p>
 </div>
+echo $feeds;
 <?php } ?>
