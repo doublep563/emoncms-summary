@@ -40,7 +40,7 @@ class Summary
     
         public function get_feeds()
         {
-      $sql = "SELECY id,name,tag from feeds ";
+      $sql = "SELECT id,name,tag from feeds ";
       error_log('Mysql Query: ' + $sql);
       $result = $this->mysqli->query($sql);
             while ($row = $result->fetch_array())
