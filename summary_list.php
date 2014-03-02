@@ -20,6 +20,5 @@
 <h4 class="alert-heading">Get a list of summary feeds</h4>
 <p> Select * from feed_summary_list:</p>
 </div>
-<?php echo $feeds; ?>
-
 <?php } ?>
+<?php echo $feeds; ?>
