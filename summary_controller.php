@@ -25,7 +25,9 @@
     if ($session['write'])
     {
       $list = $summary->check_table_exists();
-      $result = view("Modules/summary/summary_list.php", array('summary_list'=>$list));
+      $feeds = $summary->get_feeds();
+      $feedsum = $summary->get_feeds_summary_list();
+      $result = view("Modules/summary/summary_list.php", array('summary_list'=>$list),array('feeds'=>$feeds),array('feedsum'=>$feedsum));
     }
 
     return array('content'=>$result);
