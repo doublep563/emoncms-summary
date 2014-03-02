@@ -13,7 +13,7 @@
 <p> To add the summary tables:</p>
 <p>1) Go to Admin and Update & Check</p>
 </div>
-<?php } else { ?>
+<?php echo $summary_list; } else { ?>
 <div class="alert alert-block">
 <h4 class="alert-heading">Get a list of feeds</h4>
 <p> Select * from feeds and drop feeds that are in the summary table:</p>
