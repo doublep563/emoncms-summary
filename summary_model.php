@@ -54,7 +54,7 @@ class Summary
     }
             public function get_feeds_summary_list()
         {
-      $sql = "SELECY * feed_summary_list ";
+      $sql = "SELECT * from feed_summary_list ";
       error_log('Mysql Query: ' + $sql);
       $result = $this->mysqli->query($sql);
             while ($row = $result->fetch_array())
