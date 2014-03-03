@@ -1,13 +1,5 @@
 <?php
-  /*
-   All Emoncms code is released under the GNU Affero General Public License.
-   See COPYRIGHT.txt and LICENSE.txt.
 
-    ---------------------------------------------------------------------
-    Emoncms - open source energy visualisation
-    Part of the OpenEnergyMonitor project:
-    http://openenergymonitor.org
-  */
 
   // no direct access
   defined('EMONCMS_EXEC') or die('Restricted access');
@@ -16,20 +8,36 @@
   {
     global $mysqli,$user, $session, $route;
 
-   // require "Modules/summarise/summarise_model.php";
+   
     include "Modules/summary/summary_model.php";
-   // require "summarise_model.php";
-    $summary = new Summary($mysqli);
+	
+	$summary = new Summary($mysqli);
+   
+    $summary_db = new Summary($mysqli);
+    $summary_feed = new Summary($mysqli);
+    $summary_feedsum = new Summary($mysqli);
 
     $userid = $session['userid'];
+	
+	 if ($route->action == 'create' && $session['write'])
+    {
+      $summaryid = intval(get('summaryid'));
+      $summaryname = get('summaryname');
+      $summarytag = get('summarytag');
+
+      $summary->create($summaryid,$summaryname,$summarytag);
+      $result = "Summary Created";
+    }
+	
     if ($session['write'])
     {
-      $list = $summary->check_table_exists();
-      $feeds = $summary->get_feeds();
-      $feedsum = $summary->get_feeds_summary_list();
-      $result = view("Modules/summary/summary_list.php", array('summary_list'=>$list),array('feeds'=>$feeds),array('feedsum'=>$feedsum));
+      $feeds = $summary_feed->get_feeds();
+	  $list = $summary_db->check_table_exists();
+      $feedsum = $summary_feedsum->get_feeds_summary_list();
+      $result = view("Modules/summary/summary_list.php", array('feeds'=>$feeds, 'summary_list'=>$list, 'feedsum'=>$feedsum));
     }
 
     return array('content'=>$result);
   }
 ?>
+
