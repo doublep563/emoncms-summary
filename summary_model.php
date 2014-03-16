@@ -21,9 +21,7 @@ class Summary {
             $list[] = $row;
         }
         return $list;
-        //   if (!$result){
-        ///    error_log('Event Update: Mysql Error: ' + $this->mysqli->error);
-        //  }
+
     }
 
     public function get_feeds() {
@@ -35,9 +33,7 @@ class Summary {
             $list[] = $row;
         }
         return $list;
-        //   if (!$result){
-        ///    error_log('Event Update: Mysql Error: ' + $this->mysqli->error);
-        //  }
+
     }
 
     public function get_feeds_summary_list() {
@@ -49,41 +45,55 @@ class Summary {
             $list[] = $row;
         }
         return $list;
-        //   if (!$result){
-        ///    error_log('Event Update: Mysql Error: ' + $this->mysqli->error);
-        //  }
+
     }
 
-    public function get_summary_data() {
-        $sql = "SELECT UNIX_TIMESTAMP(summary_date) as summary_date, avg, min, max FROM `feed_summary` where summary_type='Daily'";
+    public function get_summary_data($summaryid, $summary_tag, $feed_name) {
 
-        $result = $this -> mysqli -> query($sql);
+        $dailysql = "SELECT UNIX_TIMESTAMP(summary_date) as summary_date, avg, min, max FROM `feed_summary` where summary_type = 'Daily' and feed_id = '$summaryid'";
+        $weeksql = "SELECT UNIX_TIMESTAMP(summary_date) as summary_date, avg, min, max FROM `feed_summary` where summary_type = 'Weekly' and feed_id = '$summaryid'";
+        $monthsql = "SELECT UNIX_TIMESTAMP(summary_date) as summary_date, avg, min, max FROM `feed_summary` where summary_type = 'Monthly' and feed_id = '$summaryid'";
 
-        while ($row = $result -> fetch_array()) {
+        $dresult = $this -> mysqli -> query($dailysql);
+        $wresult = $this -> mysqli -> query($weeksql);
+        $mresult = $this -> mysqli -> query($monthsql);
+
+        while ($row = $dresult -> fetch_array()) {
 
             $date = date($row['summary_date'] * 1000);
-            $aAVGRows[] = array($date, $row['avg']);
-            $aMINRows[] = array($date, $row['min']);
-            $aMAXRows[] = array($date, $row['max']);
+            $dAVGRows[] = array($date, $row['avg']);
+            $dMINRows[] = array($date, $row['min']);
+            $dMAXRows[] = array($date, $row['max']);
+        }
+        while ($row = $wresult -> fetch_array()) {
 
+            $date = date($row['summary_date'] * 1000);
+            $wAVGRows[] = array($date, $row['avg']);
+            $wMINRows[] = array($date, $row['min']);
+            $wMAXRows[] = array($date, $row['max']);
+        }
+        while ($row = $mresult -> fetch_array()) {
+
+            $date = date($row['summary_date'] * 1000);
+            $mAVGRows[] = array($date, $row['avg']);
+            $mMINRows[] = array($date, $row['min']);
+            $mMAXRows[] = array($date, $row['max']);
         }
 
-        //$tJson = array();
-        //TODO Temperature needs to be determined from feed
-        //$tJson['name'] = "Temperature";
-        //$tJson['averages'] = $aAVGRows;
-        //$tJson['minimums'] = $aMINRows;
-        //$tJson['maximums'] = $aMAXRows;
         $arrValues = array();
-        $arrValues[0] = $aAVGRows;
-        $arrValues[1] = $aMINRows;
-        $arrValues[2] = $aMAXRows;
+        $arrValues[0] = $dAVGRows;
+        $arrValues[1] = $dMINRows;
+        $arrValues[2] = $dMAXRows;
+        $arrValues[3] = $wAVGRows;
+        $arrValues[4] = $wMINRows;
+        $arrValues[5] = $wMAXRows;
+        $arrValues[6] = $mAVGRows;
+        $arrValues[7] = $mMINRows;
+        $arrValues[8] = $mMAXRows;
+        $arrValues[9] = $summary_tag;
+        $arrValues[10] = $feed_name;
         return $arrValues;
-        //return json_encode($tJson,JSON_NUMERIC_CHECK);
-        ////////return $list;
-        //   if (!$result){
-        ///    error_log('Event Update: Mysql Error: ' + $this->mysqli->error);
-        //  }
+
     }
 
     public function create($summaryid, $summaryname, $summarytag) {
@@ -104,12 +114,11 @@ class Summary {
             from $feedid 
             GROUP BY YEAR(myDate), MONTH(myDate);";
         $result2 = $this -> mysqli -> query($sqlmonth);
-        $sqlinsert = "INSERT INTO feed_summary_list(summary_date, feed_id, feed_name, summary_type)
-            select max(summary_date), feed_id, feed_name, summary_type from feed_summary
+        $sqlinsert = "INSERT INTO feed_summary_list(summary_date, feed_id, feed_name, summary_tag, summary_type)
+            select max(summary_date), feed_id, feed_name, '$summarytag', summary_type from feed_summary
             GROUP BY feed_id, summary_type;";
-        $sqlupdate = "UPDATE feed_summary_list " . "SET summary_tag = '$summarytag' " . "where feed_id = $summaryid";
+
         $result3 = $this -> mysqli -> query($sqlinsert);
-        $result4 = $this -> mysqli -> query($sqlupdate);
 
         /////////error_log("Mysql Query Result: ".$result3, 3, "/data/log/apache2/my-errors.log");
         if (!$result) {

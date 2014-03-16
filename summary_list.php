@@ -13,7 +13,7 @@ global $path;
 <p>1) Go to Admin and Update & Check</p>
 </div>
 
-<?php } if ($feedsum > 0)  { ?>
+<?php } else { if ($feedsum > 0)  { ?>
 <div class="alert alert-block">
 <h4 class="alert-heading">Feeds with Summaries</h4>
 </div>
@@ -25,28 +25,12 @@ global $path;
     <td><b><?php echo $myfeedsum['feed_id']; ?></b></td>
     <td><b><?php echo $myfeedsum['feed_name']; ?></b></td>
     <td><b><?php echo $myfeedsum['summary_tag']; ?></b></td>
-    
-    <td><div class="viewsummary btn" 
-            summaryid="<?php echo $myfeedsum['feed_id']; ?>"
-            summaryname="<?php echo $myfeedsum['feed_name']; ?>"
-            summarytag="<?php echo $myfeedsum['summary_tag']; ?>"
-            
-            >View</div></td>
-      <td>
-    <br>
-    <a href="<?php echo $path; ?>summary/view" class="btn btn-info"><?php echo _('Update & check'); ?></a>
-  </td>
-
-   <td><div class="managesummary btn"
-            summaryid="<?php echo $myfeedsum['feed_id']; ?>"
-            summaryname="<?php echo $myfeedsum['feed_name']; ?>"
-            summarytag="<?php echo $myfeedsum['summary_tag']; ?>"
-
-        >Manage</div></td>
-
-    
-
+    <td> <a href="<?php echo $path; ?>summary/view?summaryid=<?php echo $myfeedsum['feed_id']; ?>&summary_tag=<?php echo $myfeedsum['summary_tag']; ?>&feed_name=<?php echo $myfeedsum['feed_name']; ?>"  class="btn btn-info"><?php echo _('View'); ?></a></td>
+    <td> <a href="<?php echo $path; ?>summary/manage?summaryid=<?php echo $myfeedsum['feed_id']; ?>"  class="btn btn-info"><?php echo _('Manage'); ?></a></td>
   </tr>
+  
+  
+  
   <?php } ?>
 </table>
 
@@ -75,18 +59,28 @@ global $path;
   <?php } ?>
 </table>
 <?php } ?>
+<?php } ?>
 
 
 
-<script type="application/javascript">var path =    "<?php echo $path; ?>
+<script type="application/javascript">var path =  "<?php echo $path; ?>
     ";
-
+    //TODO Dialog to show update is running
     $(".createsummary").click(function() {
     var summaryid = $(this).attr("summaryid");
     var summaryname = $(this).attr("summaryname");
     var summarytag = $(this).attr("summarytag");
     $.ajax({type:'GET',url:path+'summary/create.json',data:'summaryid='+summaryid+'&summaryname='+summaryname+'&summarytag='+summarytag,dataType:'json',success:function(){location.reload();}});
     return false;
+    });
+
+    $(".viewsummary").click(function() {
+    var result = {};
+    var summaryid = $(this).attr("summaryid");
+    var summaryname = $(this).attr("summaryname");
+    var summarytag = $(this).attr("summarytag");
+    $.ajax({type:'GET',url:path+'summary/view.json',data:'summaryid='+summaryid+'&summaryname='+summaryname+'&summarytag='+summarytag,dataType:'json', async: false, success: function(data) {result = data;}});
+    return result;
     });
 
 </script>
