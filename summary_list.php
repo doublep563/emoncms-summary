@@ -26,8 +26,40 @@ global $path;
     <td><b><?php echo $myfeedsum['feed_name']; ?></b></td>
     <td><b><?php echo $myfeedsum['summary_tag']; ?></b></td>
     <td> <a href="<?php echo $path; ?>summary/view?summaryid=<?php echo $myfeedsum['feed_id']; ?>&summary_tag=<?php echo $myfeedsum['summary_tag']; ?>&feed_name=<?php echo $myfeedsum['feed_name']; ?>"  class="btn btn-info"><?php echo _('View'); ?></a></td>
-    <td> <a href="<?php echo $path; ?>summary/manage?summaryid=<?php echo $myfeedsum['feed_id']; ?>"  class="btn btn-info"><?php echo _('Manage'); ?></a></td>
+       <td><div class="managesummary btn btn-info" 
+            summaryid="<?php echo $myfeedsum['feed_id']; ?>"
+            summaryname="<?php echo $myfeedsum['feed_name']; ?>"
+            summarytag="<?php echo $myfeedsum['summary_tag']; ?>"
+
+        >Manage</div></td>   
   </tr>
+ 
+  <tr class="feed_id_row<?php echo $myfeedsum['feed_id']; ?>" style="display:none">
+    <td><b></b></td>
+    <td><b>Daily</b></td>
+    <td><b>Last Updated:</b></td>
+    <td><b>Status:</b></td>
+  </tr>
+  <tr class="feed_id_row<?php echo $myfeedsum['feed_id']; ?>" style="display:none">
+    <td><b></b></td>
+    <td><b>Weekly</b></td>
+    <td><b>Last Updated:</b></td>
+    <td><b>Status:</b></td>
+  </tr>
+    <tr class="feed_id_row<?php echo $myfeedsum['feed_id']; ?>" style="display:none">
+    <td><b></b></td>
+    <td><b>Monthly</b></td>
+    <td><b>Last Updated:</b></td>
+    <td><b>Status:</b></td>
+  </tr>
+    <tr align="right"  class="feed_id_row<?php echo $myfeedsum['feed_id']; ?>" style="display:none">
+    <td><b></b></td>
+    <td><b></b></td>
+    <td><b></b></td>
+    <td><b></b></td>
+    <td> <a href="<?php echo $path; ?>summary/delete?summaryid=<?php echo $myfeedsum['feed_id']; ?>&summary_tag=<?php echo $myfeedsum['summary_tag']; ?>&feed_name=<?php echo $myfeedsum['feed_name']; ?>"  class="btn btn-info"><?php echo _('Delete'); ?></a></td>
+  </tr>
+
   
   
   
@@ -63,7 +95,7 @@ global $path;
 
 
 
-<script type="application/javascript">var path =  "<?php echo $path; ?>
+<script type="application/javascript">var path =   "<?php echo $path; ?>
     ";
     //TODO Dialog to show update is running
     $(".createsummary").click(function() {
@@ -83,4 +115,10 @@ global $path;
     return result;
     });
 
+    $(".managesummary").click(function(e) {
+    e.preventDefault();
+    var summaryid = $(this).attr("summaryid");
+    $('.feed_id_row'+summaryid).toggle();
+    console.log('Manage Button Clicked');
+    });
 </script>

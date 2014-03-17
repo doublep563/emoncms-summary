@@ -21,38 +21,43 @@ class Summary {
             $list[] = $row;
         }
         return $list;
+    }
+
+    public function delete($summaryid) {
+        // Delete Summaries
+        $sql = "Delete from feed_summary where feed_id = '$summaryid'";
+        $result = $this -> mysqli -> query($sql);
+        // Delete Summaries List
+        $sql1 = "Delete from feed_summary_list where feed_id = '$summaryid'";
+        $result1 = $this -> mysqli -> query($sql1);
 
     }
 
     public function get_feeds() {
         $list = array();
         $sql = "SELECT id, name , tag FROM feeds WHERE feeds.id NOT IN (SELECT DISTINCT feed_id as id  FROM feed_summary_list);";
-        error_log('Mysql Query: ' + $sql);
         $result = $this -> mysqli -> query($sql);
         while ($row = $result -> fetch_array()) {
             $list[] = $row;
         }
         return $list;
-
     }
 
     public function get_feeds_summary_list() {
         $list = array();
         $sql = "SELECT DISTINCT feed_id, feed_name,summary_tag from feed_summary_list;";
-        error_log('Mysql Query: ' + $sql);
         $result = $this -> mysqli -> query($sql);
         while ($row = $result -> fetch_array()) {
             $list[] = $row;
         }
         return $list;
-
     }
 
     public function get_summary_data($summaryid, $summary_tag, $feed_name) {
 
-        $dailysql = "SELECT UNIX_TIMESTAMP(summary_date) as summary_date, avg, min, max FROM `feed_summary` where summary_type = 'Daily' and feed_id = '$summaryid'";
-        $weeksql = "SELECT UNIX_TIMESTAMP(summary_date) as summary_date, avg, min, max FROM `feed_summary` where summary_type = 'Weekly' and feed_id = '$summaryid'";
-        $monthsql = "SELECT UNIX_TIMESTAMP(summary_date) as summary_date, avg, min, max FROM `feed_summary` where summary_type = 'Monthly' and feed_id = '$summaryid'";
+        $dailysql = "SELECT UNIX_TIMESTAMP(summary_date) as summary_date, avg, min, max FROM `feed_summary` where summary_type = 'Daily' and feed_id = '$summaryid' ORDER BY summary_date";
+        $weeksql = "SELECT UNIX_TIMESTAMP(summary_date) as summary_date, avg, min, max FROM `feed_summary` where summary_type = 'Weekly' and feed_id = '$summaryid' ORDER BY summary_date";
+        $monthsql = "SELECT UNIX_TIMESTAMP(summary_date) as summary_date, avg, min, max FROM `feed_summary` where summary_type = 'Monthly' and feed_id = '$summaryid' ORDER BY summary_date";
 
         $dresult = $this -> mysqli -> query($dailysql);
         $wresult = $this -> mysqli -> query($weeksql);
@@ -115,7 +120,7 @@ class Summary {
             GROUP BY YEAR(myDate), MONTH(myDate);";
         $result2 = $this -> mysqli -> query($sqlmonth);
         $sqlinsert = "INSERT INTO feed_summary_list(summary_date, feed_id, feed_name, summary_tag, summary_type)
-            select max(summary_date), feed_id, feed_name, '$summarytag', summary_type from feed_summary
+            SELECT max(summary_date), feed_id, feed_name, '$summarytag', summary_type FROM feed_summary WHERE feed_id = '$summaryid'
             GROUP BY feed_id, summary_type;";
 
         $result3 = $this -> mysqli -> query($sqlinsert);

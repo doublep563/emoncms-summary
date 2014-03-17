@@ -5,7 +5,7 @@ defined('EMONCMS_EXEC') or die('Restricted access');
 
 function summary_controller() {
     global $mysqli, $user, $session, $route;
-    
+
     include "Modules/summary/summary_model.php";
 
     $summary = new Summary($mysqli);
@@ -26,6 +26,21 @@ function summary_controller() {
             $result = view("Modules/summary/Views/summary_view.php", array('feedsumdata' => $feedsumdata));
 
             //error_log("route->action == view" . $summaryid, 3, "/data/log/apache2/my-errors.log");
+        }
+
+        if ($route -> action == "delete" && $session['write']) {
+
+            $summaryid = intval(get('summaryid'));
+            $summary_tag = (get('summary_tag'));
+            $feed_name = (get('feed_name'));
+            $deletedata = $summary -> delete($summaryid);
+            $list = $summary_db -> check_table_exists();
+            $feeds = $summary_feed -> get_feeds();
+            $feedsum = $summary_feedsum -> get_feeds_summary_list();
+            $result = view("Modules/summary/summary_list.php", array('feeds' => $feeds, 'summary_list' => $list, 'feedsum' => $feedsum));
+            
+
+            //error_log("route->action == delete" . $summaryid, 3, "/data/log/apache2/my-errors.log");
         }
 
         if ($route -> action == "list" && $session['write']) {
@@ -59,7 +74,7 @@ function summary_controller() {
             $summarytag = get('summarytag');
             $feedsumdata = $summary_db -> get_summary_data();
             $result = view("Modules/summary/Views/summary_view.php", array('feedsumdata' => $feedsumdata));
-            
+
             //error_log("route->action == view", 3, "/data/log/apache2/my-errors.log");
         }
 
