@@ -168,8 +168,7 @@ global $path;
         $('.switcher').click(function () {
         var id = $(this).attr('id');
 
-        var summary_tag = '
-    <?php echo $summary_tag?>';
+        var summary_tag = '<?php echo $summary_tag?>';
 
         if (id == 'Daily') {
         var averages = <?php echo json_encode($daverages, JSON_NUMERIC_CHECK); ?>;

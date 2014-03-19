@@ -37,8 +37,8 @@ function summary_controller() {
             $list = $summary_db -> check_table_exists();
             $feeds = $summary_feed -> get_feeds();
             $feedsum = $summary_feedsum -> get_feeds_summary_list();
-            $result = view("Modules/summary/summary_list.php", array('feeds' => $feeds, 'summary_list' => $list, 'feedsum' => $feedsum));
-            
+            $feedsumlist = $summary -> get_feeds_summary_list_all();
+            $result = view("Modules/summary/summary_list.php", array('feeds' => $feeds, 'summary_list' => $list, 'feedsum' => $feedsum, 'feedsumlist' => $feedsumlist));
 
             //error_log("route->action == delete" . $summaryid, 3, "/data/log/apache2/my-errors.log");
         }
@@ -51,7 +51,8 @@ function summary_controller() {
             } else {
                 $feeds = $summary_feed -> get_feeds();
                 $feedsum = $summary_feedsum -> get_feeds_summary_list();
-                $result = view("Modules/summary/summary_list.php", array('feeds' => $feeds, 'summary_list' => $list, 'feedsum' => $feedsum));
+                $feedsumlist = $summary -> get_feeds_summary_list_all();
+                $result = view("Modules/summary/summary_list.php", array('feeds' => $feeds, 'summary_list' => $list, 'feedsum' => $feedsum, 'feedsumlist' => $feedsumlist));
             }
             //error_log("route->action == list", 3, "/data/log/apache2/my-errors.log");
         }
