@@ -30,7 +30,32 @@ class Summary {
         // Delete Summaries List
         $sql1 = "Delete from feed_summary_list where feed_id = '$summaryid'";
         $result1 = $this -> mysqli -> query($sql1);
-
+        
+        }
+    
+        public function update($summaryid, $summary_date, $summary_type, $summaryname) {
+        
+        $feedid = "feed_" . $summaryid;
+        
+        if ($summary_type == 'Daily' ){
+        $sql = "INSERT INTO feed_summary(summary_date, feed_id, feed_name, summary_type, avg, max, min, count)
+            select FROM_UNIXTIME(time,'%Y-%m-%d') as myDate, '$summaryid', '$summaryname', 'Daily', AVG(data),MAX(data),MIN(data),COUNT(*)
+            from (SELECT * from $feedid ORDER by time DESC) as temp WHERE DATE(FROM_UNIXTIME(time)) < DATE(CURDATE()) AND DATE(FROM_UNIXTIME(time)) > '$summary_date'
+            GROUP BY myDate;";
+                }
+        else if ($summary_type == 'Weekly' ){
+        $sql = "INSERT INTO feed_summary(summary_date, feed_id, feed_name, summary_type, avg, max, min, count)
+            select FROM_UNIXTIME(time,'%Y-%m-%d') as myDate, '$summaryid', '$summaryname', 'Weekly', AVG(data),MAX(data),MIN(data),COUNT(*)
+            from (SELECT * from $feedid ORDER by time DESC) as temp WHERE YEARWEEK(FROM_UNIXTIME(time)) < YEARWEEK(CURDATE()) AND YEARWEEK(FROM_UNIXTIME(time),7) > YEARWEEK('$summary_date',7)
+            GROUP BY YEAR(myDate), WEEK(myDate,7);";
+                }
+        $result = $this -> mysqli -> query($sql);
+        
+        $sql1 = "UPDATE feed_summary_list 
+                SET summary_date = (SELECT max(summary_date) FROM feed_summary WHERE feed_id = '$summaryid' and summary_type = '$summary_type')
+                WHERE feed_id = '$summaryid' and summary_type = '$summary_type'";
+        $result1 = $this -> mysqli -> query($sql1);
+        error_log("route->action == sql update", 3, "/data/log/apache2/my-errors.log");
     }
 
     public function get_feeds() {

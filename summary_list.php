@@ -88,7 +88,8 @@ global $path;
     <td><b><?php echo $myfeedsumlist['summary_type']; ?></b></td>
     <td><b>Last Updated : <?php echo $myfeedsumlist['summary_date']; ?></b></td>
     <td><div style="background-color: <?=getProperColor($status) ?>;"><b>Status :  <?php echo $status; ?></b></td>
-     <td><div class="updatesummary btn btn-info" style="display:  <?=getUpdateStaus($status) ?>;"><b>Update</b></td>
+     <td><a href="<?php echo $path; ?>summary/update?summaryid=<?php echo $myfeedsum['feed_id']; ?>&summary_date=<?php echo $myfeedsumlist['summary_date']; ?>&summary_type=<?php echo $myfeedsumlist['summary_type']; ?>&summary_name=<?php echo $myfeedsum['feed_name']; ?>" class="updatesummary btn btn-info" style="display:  <?=getUpdateStaus($status) ?>;">
+            Update</a></td>
   </tr>
 <?php }} ?>
   </tr>
@@ -97,13 +98,9 @@ global $path;
     <td><b></b></td>
     <td><b></b></td>
     <td><b></b></td>
-    <td> <a href="<?php echo $path; ?>summary/delete?summaryid=<?php echo $myfeedsum['feed_id']; ?>&summary_tag=<?php echo $myfeedsum['summary_tag']; ?>&feed_name=<?php echo $myfeedsum['feed_name']; ?>"  class="btn btn-info">Delete</a></td>
+    <td> <a href="<?php echo $path; ?>summary/deletesum?summaryid=<?php echo $myfeedsum['feed_id']; ?>&summary_tag=<?php echo $myfeedsum['summary_tag']; ?>&feed_name=<?php echo $myfeedsum['feed_name']; ?>"  class="deletesummary btn btn-info">Delete</a></td>
   </tr>
-
-  
-  
-  
-  <?php } ?>
+<?php } ?>
 </table>
 
 <?php } if ($feeds > 0)  { ?>
@@ -133,37 +130,38 @@ global $path;
 <?php } ?>
 <?php } ?>
 <?php
-    // Set color of status in Manage View
-    function getProperColor($status) {
-        if ($status == "Red")
-            return '#FF0000';
-        else if ($status == "Orange")
-            return '#FF9900';
-        else if ($status == "Yellow")
-            return '#FFFF00';
-        else
-            return '#99FF00';
+// Set color of status in Manage View
+function getProperColor($status) {
+    if ($status == "Red")
+        return '#FF0000';
+    else if ($status == "Orange")
+        return '#FF9900';
+    else if ($status == "Yellow")
+        return '#FFFF00';
+    else
+        return '#99FF00';
 
-    }
+}
 
-    function getUpdateStaus($status) {
-        if ($status == "Green")
-            return 'none';
-        else
-            return 'inline';
-    }
+function getUpdateStaus($status) {
+    if ($status == "Green")
+        return 'none';
+    else
+        return 'inline';
+}
  ?>
 
 
-<script type="application/javascript">var path =    "<?php echo $path; ?>
+<script type="application/javascript">var path =     "<?php echo $path; ?>
     ";
     //TODO Dialog to show update is running
     $(".createsummary").click(function() {
+    //var result = {};
     var summaryid = $(this).attr("summaryid");
     var summaryname = $(this).attr("summaryname");
     var summarytag = $(this).attr("summarytag");
-    $.ajax({type:'GET',url:path+'summary/create.json',data:'summaryid='+summaryid+'&summaryname='+summaryname+'&summarytag='+summarytag,dataType:'json',success:function(){location.reload();}});
-    return false;
+    $.ajax({type:'GET',url:path+'summary/createsum.json',data:'summaryid='+summaryid+'&summaryname='+summaryname+'&summarytag='+summarytag,dataType:'json',success:function(a){location.reload();}});
+    //return false;
     });
 
     $(".viewsummary").click(function() {
