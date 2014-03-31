@@ -32,9 +32,9 @@ global $path;
         ?>
     </head>
     <body>
-        <header>
-            <h2>Emoncms Feed Summary</h2>
-        </header>
+        <div class="alert alert-block">
+            <h4 class="alert-heading">Emoncms Feed Summary</h4>
+        </div>
 
         <!-- Various actions -->
         <div class="wrapper">

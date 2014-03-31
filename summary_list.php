@@ -1,6 +1,12 @@
 <?php
 global $path;
  ?>
+<div id="myimgdiv">
+<img id="loader" src="<?php echo $path; ?>Modules/summary/Views/images/loader.gif" class="loader" />
+</div>
+
+<link rel="stylesheet" type="text/css" href="<?php echo $path; ?>Modules/summary/Views/css/main.css">
+
 
 <h2>Summaries</h2>
 
@@ -88,7 +94,7 @@ global $path;
     <td><b><?php echo $myfeedsumlist['summary_type']; ?></b></td>
     <td><b>Last Updated : <?php echo $myfeedsumlist['summary_date']; ?></b></td>
     <td><div style="background-color: <?=getProperColor($status) ?>;"><b>Status :  <?php echo $status; ?></b></td>
-     <td><a href="<?php echo $path; ?>summary/update?summaryid=<?php echo $myfeedsum['feed_id']; ?>&summary_date=<?php echo $myfeedsumlist['summary_date']; ?>&summary_type=<?php echo $myfeedsumlist['summary_type']; ?>&summary_name=<?php echo $myfeedsum['feed_name']; ?>" class="updatesummary btn btn-info" style="display:  <?=getUpdateStaus($status) ?>;">
+     <td><a href="<?php echo $path; ?>summary/update?summaryid=<?php echo $myfeedsum['feed_id']; ?>&summary_date=<?php echo $myfeedsumlist['summary_date']; ?>&summary_type=<?php echo $myfeedsumlist['summary_type']; ?>&summary_name=<?php echo $myfeedsum['feed_name']; ?>" class="updatesummary btn btn-info" style="display:  <?=getUpdateStatus($status) ?>;">
             Update</a></td>
   </tr>
 <?php }} ?>
@@ -142,8 +148,8 @@ function getProperColor($status) {
         return '#99FF00';
 
 }
-
-function getUpdateStaus($status) {
+// Show or hide Update button depending on Status color
+function getUpdateStatus($status) {
     if ($status == "Green")
         return 'none';
     else
@@ -152,19 +158,22 @@ function getUpdateStaus($status) {
  ?>
 
 
-<script type="application/javascript">var path =     "<?php echo $path; ?>
-    ";
-    //TODO Dialog to show update is running
-    $(".createsummary").click(function() {
-    //var result = {};
+<script type="application/javascript">
+
+    var path = "<?php echo $path; ?>";
+    
+    $('#loader').hide();
+        
+    $(".createsummary").click(function(create) {
+    $('#loader').show();
     var summaryid = $(this).attr("summaryid");
     var summaryname = $(this).attr("summaryname");
     var summarytag = $(this).attr("summarytag");
     $.ajax({type:'GET',url:path+'summary/createsum.json',data:'summaryid='+summaryid+'&summaryname='+summaryname+'&summarytag='+summarytag,dataType:'json',success:function(a){location.reload();}});
-    //return false;
+    return false;
     });
 
-    $(".viewsummary").click(function() {
+    $(".viewsummary").click(function(view) {
     var result = {};
     var summaryid = $(this).attr("summaryid");
     var summaryname = $(this).attr("summaryname");
@@ -178,6 +187,16 @@ function getUpdateStaus($status) {
     var summaryid = $(this).attr("summaryid");
     $('.feed_id_row'+summaryid).toggle();
     console.log('Manage Button Clicked');
+    });
+    
+    $(".updatesummary").click(function() {
+        $('#loader').show();
+        console.log('Update Button Clicked');
+    });
+    
+    $(".deletesummary").click(function() {
+        $('#loader').show();
+        console.log('Delete Button Clicked');
     });
 
 </script>
