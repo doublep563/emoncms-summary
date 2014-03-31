@@ -10,10 +10,6 @@ function summary_controller() {
 
     $summary = new Summary($mysqli);
 
-    $summary_db = new Summary($mysqli);
-    $summary_feed = new Summary($mysqli);
-    $summary_feedsum = new Summary($mysqli);
-
     $userid = $session['userid'];
 
     if ($route -> format == 'html') {
@@ -22,7 +18,7 @@ function summary_controller() {
             $summaryid = intval(get('summaryid'));
             $summary_tag = (get('summary_tag'));
             $feed_name = (get('feed_name'));
-            $feedsumdata = $summary_db -> get_summary_data($summaryid, $summary_tag, $feed_name);
+            $feedsumdata = $summary -> get_summary_data($summaryid, $summary_tag, $feed_name);
             $result = view("Modules/summary/Views/summary_view.php", array('feedsumdata' => $feedsumdata));
 
             //error_log("route->action == view" . $summaryid, 3, "/data/log/apache2/my-errors.log");
@@ -34,13 +30,13 @@ function summary_controller() {
             $summary_tag = (get('summary_tag'));
             $feed_name = (get('feed_name'));
             $deletedata = $summary -> delete($summaryid);
-            $list = $summary_db -> check_table_exists();
-            $feeds = $summary_feed -> get_feeds();
-            $feedsum = $summary_feedsum -> get_feeds_summary_list();
+            $list = $summary -> check_table_exists();
+            $feeds = $summary -> get_feeds();
+            $feedsum = $summary -> get_feeds_summary_list();
             $feedsumlist = $summary -> get_feeds_summary_list_all();
             $result = view("Modules/summary/summary_list.php", array('feeds' => $feeds, 'summary_list' => $list, 'feedsum' => $feedsum, 'feedsumlist' => $feedsumlist));
 
-            error_log("route->action == update list" . $summaryid, 3, "/data/log/apache2/my-errors.log");
+            //error_log("route->action == update list" . $summaryid, 3, "/data/log/apache2/my-errors.log");
         }
         
         if ($route -> action == "update" && $session['write']) {
@@ -51,11 +47,11 @@ function summary_controller() {
             $summary_name = (get('summary_name'));
             $update = $summary -> update($summaryid, $summary_date, $summary_type, $summary_name );
             
-            $list = $summary_db -> check_table_exists();
+            $list = $summary -> check_table_exists();
            
-            $feeds = $summary_feed -> get_feeds();
+            $feeds = $summary -> get_feeds();
             
-            $feedsum = $summary_feedsum -> get_feeds_summary_list();
+            $feedsum = $summary -> get_feeds_summary_list();
             
             $feedsumlist = $summary -> get_feeds_summary_list_all();
             
@@ -66,13 +62,13 @@ function summary_controller() {
         }
 
         if ($route -> action == "list" && $session['write']) {
-            $list = $summary_db -> check_table_exists();
+            $list = $summary -> check_table_exists();
 
             if (!$list) {
                 $result = view("Modules/summary/summary_list.php", array('summary_list' => $list));
             } else {
-                $feeds = $summary_feed -> get_feeds();
-                $feedsum = $summary_feedsum -> get_feeds_summary_list();
+                $feeds = $summary -> get_feeds();
+                $feedsum = $summary -> get_feeds_summary_list();
                 $feedsumlist = $summary -> get_feeds_summary_list_all();
                 $result = view("Modules/summary/summary_list.php", array('feeds' => $feeds, 'summary_list' => $list, 'feedsum' => $feedsum, 'feedsumlist' => $feedsumlist));
             }
@@ -96,7 +92,7 @@ function summary_controller() {
             $summaryid = intval(get('summaryid'));
             $summaryname = get('summaryname');
             $summarytag = get('summarytag');
-            $feedsumdata = $summary_db -> get_summary_data();
+            $feedsumdata = $summary -> get_summary_data();
             $result = view("Modules/summary/Views/summary_view.php", array('feedsumdata' => $feedsumdata));
 
             //error_log("route->action == view", 3, "/data/log/apache2/my-errors.log");

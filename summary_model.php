@@ -46,7 +46,7 @@ class Summary {
         else if ($summary_type == 'Weekly' ){
         $sql = "INSERT INTO feed_summary(summary_date, feed_id, feed_name, summary_type, avg, max, min, count)
             select FROM_UNIXTIME(time,'%Y-%m-%d') as myDate, '$summaryid', '$summaryname', 'Weekly', AVG(data),MAX(data),MIN(data),COUNT(*)
-            from (SELECT * from $feedid ORDER by time DESC) as temp WHERE YEARWEEK(FROM_UNIXTIME(time)) < YEARWEEK(CURDATE()) AND YEARWEEK(FROM_UNIXTIME(time),7) > YEARWEEK('$summary_date',7)
+            from (SELECT * from $feedid ORDER by time DESC) as temp WHERE YEARWEEK(FROM_UNIXTIME(time),7) < YEARWEEK(CURDATE(),7) AND YEARWEEK(FROM_UNIXTIME(time),7) > YEARWEEK('$summary_date',7)
             GROUP BY YEAR(myDate), WEEK(myDate,7);";
                 }
         $result = $this -> mysqli -> query($sql);
