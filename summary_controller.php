@@ -45,14 +45,12 @@ function summary_controller() {
             $summary_date = (get('summary_date'));
             $summary_type = (get('summary_type'));
             $summary_name = (get('summary_name'));
+            
             $update = $summary -> update($summaryid, $summary_date, $summary_type, $summary_name );
             
             $list = $summary -> check_table_exists();
-           
             $feeds = $summary -> get_feeds();
-            
             $feedsum = $summary -> get_feeds_summary_list();
-            
             $feedsumlist = $summary -> get_feeds_summary_list_all();
             
             $result = view("Modules/summary/summary_list.php", array('feeds' => $feeds, 'summary_list' => $list, 'feedsum' => $feedsum, 'feedsumlist' => $feedsumlist));

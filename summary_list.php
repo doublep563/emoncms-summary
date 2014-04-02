@@ -75,13 +75,13 @@ global $path;
             }
         else if ($myfeedsumlist['summary_type'] == 'Monthly')
             {   
-                if ($interval->m > 3) {
+                if ($interval->m > 2) {
                     $status = "Red";
                 }
-                else if ($interval->m > 2) {
+                else if ($interval->m > 1) {
                     $status = "Orange";
                 }
-                else if ($interval->m > 1) {
+                else if ($interval->m > 0) {
                     $status = "Yellow";
                 }
                 else $status ="Green";

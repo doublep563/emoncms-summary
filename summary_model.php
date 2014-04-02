@@ -49,6 +49,15 @@ class Summary {
             from (SELECT * from $feedid ORDER by time DESC) as temp WHERE YEARWEEK(FROM_UNIXTIME(time),7) < YEARWEEK(CURDATE(),7) AND YEARWEEK(FROM_UNIXTIME(time),7) > YEARWEEK('$summary_date',7)
             GROUP BY YEAR(myDate), WEEK(myDate,7);";
                 }
+        else if ($summary_type == 'Monthly' ){
+        $sql = "INSERT INTO feed_summary(summary_date, feed_id, feed_name, summary_type, avg, max, min, count)
+            select FROM_UNIXTIME(time,'%Y-%m-%d') as myDate, '$summaryid', '$summaryname', 'Monthly', AVG(data),MAX(data),MIN(data),COUNT(*)
+            from (SELECT * from $feedid ORDER by time DESC) as temp 
+            WHERE (YEAR(FROM_UNIXTIME(time)) <= YEAR(CURRENT_DATE - INTERVAL 1 MONTH)
+            AND MONTH(FROM_UNIXTIME(time)) <= MONTH(CURRENT_DATE - INTERVAL 1 MONTH))
+            AND DATE(FROM_UNIXTIME(time)) > '$summary_date'
+            GROUP BY YEAR(myDate), MONTH(myDate);";
+                }
         $result = $this -> mysqli -> query($sql);
         
         $sql1 = "UPDATE feed_summary_list 
@@ -154,8 +163,8 @@ class Summary {
         $sqlmonth = "INSERT INTO feed_summary(summary_date, feed_id, feed_name, summary_type, avg, max, min, count)
             select FROM_UNIXTIME(time,'%Y-%m-%d') as myDate, '$summaryid', '$summaryname', 'Monthly', AVG(data),MAX(data),MIN(data),COUNT(*)
             from (SELECT * from $feedid ORDER by time DESC) as temp
-            WHERE YEAR(FROM_UNIXTIME(time)) = YEAR(CURRENT_DATE - INTERVAL 1 MONTH)
-            AND MONTH(FROM_UNIXTIME(time)) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH)
+            WHERE YEAR(FROM_UNIXTIME(time)) <= YEAR(CURRENT_DATE - INTERVAL 1 MONTH)
+            AND MONTH(FROM_UNIXTIME(time)) <= MONTH(CURRENT_DATE - INTERVAL 1 MONTH)
             GROUP BY YEAR(myDate), MONTH(myDate);";
         $result2 = $this -> mysqli -> query($sqlmonth);
         $sqlinsert = "INSERT INTO feed_summary_list(summary_date, feed_id, feed_name, summary_tag, summary_type)
