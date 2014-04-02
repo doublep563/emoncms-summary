@@ -1,6 +1,6 @@
 emoncms-summary
 ===============
 
-Summarise data in emconcmcs
+Summarise data in emoncms
 
-Create 2 tables in emcomcms and populate with feed summaries.
+Create 2 tables in emoncms and populate with feed summaries.
