@@ -1,6 +1,6 @@
-emoncms-summary
+emoncms-summaryTH
 ===============
 
-Summarise data in emconcmcs
+Summarise Temperature and Humidty data in emomcms
 
-Create 2 tables in emcomcms and populate with feed summaries.
+

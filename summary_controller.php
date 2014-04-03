@@ -12,7 +12,7 @@ function summary_controller() {
 
     $userid = $session['userid'];
 
-    if ($route -> format == 'html') {
+ 
         if ($route -> action == "view" && $session['write']) {
 
             $summaryid = intval(get('summaryid'));
@@ -24,22 +24,17 @@ function summary_controller() {
             //error_log("route->action == view" . $summaryid, 3, "/data/log/apache2/my-errors.log");
         }
 
-        if ($route -> action == "deletesum" && $session['write']) {
+        else if ($route -> action == "deletesum" && $session['write']) {
 
-            $summaryid = intval(get('summaryid'));
-            $summary_tag = (get('summary_tag'));
-            $feed_name = (get('feed_name'));
+            $summaryid = intval(get('feed_id'));
+
             $deletedata = $summary -> delete($summaryid);
-            $list = $summary -> check_table_exists();
-            $feeds = $summary -> get_feeds();
-            $feedsum = $summary -> get_feeds_summary_list();
-            $feedsumlist = $summary -> get_feeds_summary_list_all();
-            $result = view("Modules/summary/summary_list.php", array('feeds' => $feeds, 'summary_list' => $list, 'feedsum' => $feedsum, 'feedsumlist' => $feedsumlist));
-
+            
+            $result = "Fed Summary Deleted";
             //error_log("route->action == update list" . $summaryid, 3, "/data/log/apache2/my-errors.log");
         }
         
-        if ($route -> action == "update" && $session['write']) {
+        else if ($route -> action == "update" && $session['write']) {
 
             $summaryid = intval(get('summaryid'));
             $summary_date = (get('summary_date'));
@@ -59,7 +54,7 @@ function summary_controller() {
             
         }
 
-        if ($route -> action == "list" && $session['write']) {
+        else if ($route -> action == "list" && $session['write']) {
             $list = $summary -> check_table_exists();
 
             if (!$list) {
@@ -73,10 +68,10 @@ function summary_controller() {
             //error_log("route->action == list", 3, "/data/log/apache2/my-errors.log");
         }
 
-    }
 
-    if ($route -> format == 'json') {
-        if ($route -> action == 'createsum' && $session['write']) {
+
+
+        else if ($route -> action == 'createsum' && $session['write']) {
             $summaryid = intval(get('summaryid'));
             $summaryname = get('summaryname');
             $summarytag = get('summarytag');
@@ -86,17 +81,21 @@ function summary_controller() {
             $result = "Summary Created";
         }
 
-        if ($route -> action == 'view' && $session['write']) {
-            $summaryid = intval(get('summaryid'));
-            $summaryname = get('summaryname');
-            $summarytag = get('summarytag');
-            $feedsumdata = $summary -> get_summary_data();
-            $result = view("Modules/summary/Views/summary_view.php", array('feedsumdata' => $feedsumdata));
+         else if ($session['write']) {
+            $list = $summary -> check_table_exists();
 
-            //error_log("route->action == view", 3, "/data/log/apache2/my-errors.log");
+            if (!$list) {
+                $result = view("Modules/summary/summary_list.php", array('summary_list' => $list));
+            } else {
+                $feeds = $summary -> get_feeds();
+                $feedsum = $summary -> get_feeds_summary_list();
+                $feedsumlist = $summary -> get_feeds_summary_list_all();
+                $result = view("Modules/summary/summary_list.php", array('feeds' => $feeds, 'summary_list' => $list, 'feedsum' => $feedsum, 'feedsumlist' => $feedsumlist));
+            }
+           
         }
 
-    }
+  
     return array('content' => $result);
 }
 ?>

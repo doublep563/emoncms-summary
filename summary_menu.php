@@ -9,5 +9,5 @@ $domain = "messages";
 bindtextdomain($domain, "Modules/feed/locale");
 bind_textdomain_codeset($domain, 'UTF-8');
 
-$menu_dropdown[] = array('name' => "Summarise", 'path' => "summary/list", 'session' => "write", 'order' => 11);
+$menu_dropdown[] = array('name' => "SummaryTH", 'path' => "summary/list", 'session' => "write", 'order' => 11);
 ?>
