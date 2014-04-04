@@ -29,6 +29,7 @@ global $path;
         // Title and Axis
         $summary_tag = $feedsumdata[9];
         $feed_name = $feedsumdata[10];
+
         ?>
     </head>
     <body>
@@ -58,15 +59,21 @@ global $path;
         // on document ready
     var chart;
     $(document).ready(function() {
+	
+		Highcharts.setOptions({
+		global: {
+			useUTC: false
+			}
+		});
 
         var averages = <?php echo json_encode($daverages, JSON_NUMERIC_CHECK); ?>;
         var minimums = <?php echo json_encode($dminimums, JSON_NUMERIC_CHECK); ?>;
         var maximums = <?php echo json_encode($dmaximums, JSON_NUMERIC_CHECK); ?>;
         var summary_tag = '<?php echo $summary_tag?>';
         var feed_name = '<?php echo $feed_name?>';
-        var cTitle = 'Daily Summary - ' + summary_tag ;
+        var cTitle = 'Daily Summary - ' + feed_name + ' ' + summary_tag ;
         var yTitle = feed_name;
-
+		//alert(JSON.stringify(averages));
         //console.log('Start HC Java Script');
         // prepare an empty Highcharts object
         chart = new Highcharts.Chart({
@@ -167,28 +174,28 @@ global $path;
         // The Switcher
         $('.switcher').click(function () {
         var id = $(this).attr('id');
-
+		var feed_name = '<?php echo $feed_name?>';
         var summary_tag = '<?php echo $summary_tag?>';
 
         if (id == 'Daily') {
         var averages = <?php echo json_encode($daverages, JSON_NUMERIC_CHECK); ?>;
         var minimums = <?php echo json_encode($dminimums, JSON_NUMERIC_CHECK); ?>;
         var maximums = <?php echo json_encode($dmaximums, JSON_NUMERIC_CHECK); ?>;
-        var cTitle = 'Daily Summary - ' + summary_tag ;
+        var cTitle = 'Daily Summary - ' + feed_name + ' ' + summary_tag ;
     }
 
     else if (id == 'Weekly') {
     var averages =  <?php echo json_encode($waverages, JSON_NUMERIC_CHECK); ?>;
         var minimums = <?php echo json_encode($wminimums, JSON_NUMERIC_CHECK); ?>;
         var maximums = <?php echo json_encode($wmaximums, JSON_NUMERIC_CHECK); ?>;
-        var cTitle = 'Weekly Summary - ' + summary_tag ;
+        var cTitle = 'Weekly Summary - ' + feed_name + ' ' + summary_tag ;
     }
 
     else if (id == 'Monthly') {
         var averages =  <?php echo json_encode($maverages, JSON_NUMERIC_CHECK); ?>;
         var minimums = <?php echo json_encode($mminimums, JSON_NUMERIC_CHECK); ?>;
         var maximums = <?php echo json_encode($mmaximums, JSON_NUMERIC_CHECK); ?>;
-        var cTitle = 'Monthly Summary - ' + summary_tag;
+        var cTitle = 'Monthly Summary - ' + feed_name + ' ' + summary_tag ;
         }
 
         // console.log('Start HC Java Script - Switcher' + id);
@@ -220,7 +227,7 @@ global $path;
         var seriesAverages = {
             name : 'Average',
             data : averages,
-            type : 'column',
+            type: 'column',
             color : '#7798BF'
         }
 

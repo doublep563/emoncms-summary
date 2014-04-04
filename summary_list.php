@@ -31,7 +31,7 @@ global $path;
     <td><b><?php echo $myfeedsum['feed_id']; ?></b></td>
     <td><b><?php echo $myfeedsum['feed_name']; ?></b></td>
     <td><b><?php echo $myfeedsum['summary_tag']; ?></b></td>
-    <td> <a href="<?php echo $path; ?>summary/view?summaryid=<?php echo $myfeedsum['feed_id']; ?>&summary_tag=<?php echo $myfeedsum['summary_tag']; ?>&feed_name=<?php echo $myfeedsum['feed_name']; ?>"  class="btn btn-info"><?php echo _('View'); ?></a></td>
+    <td> <a href="<?php echo $path; ?>summary/view?summaryid=<?php echo $myfeedsum['feed_id']; ?>&summary_tag=<?php echo $myfeedsum['summary_tag']; ?>&feed_name=<?php echo $myfeedsum['feed_name']; ?>"  class="btn btn-info">View</a></td>
     <td><div class="managesummary btn btn-info" 
         summaryid="<?php echo $myfeedsum['feed_id']; ?>"
         summaryname="<?php echo $myfeedsum['feed_name']; ?>"
@@ -62,26 +62,26 @@ global $path;
             }
         else if ($myfeedsumlist['summary_type'] == 'Weekly')
             {   
-                if ($interval->d > 21) {
+                if ($interval->d > 28) {
                     $status = "Red";
                 }
-                else if ($interval->d > 14) {
+                else if ($interval->d > 21) {
                     $status = "Orange";
                 }
-                else if ($interval->d > 7) {
+                else if ($interval->d > 14) {
                     $status = "Yellow";
                 }
                 else $status ="Green";              
             }
         else if ($myfeedsumlist['summary_type'] == 'Monthly')
             {   
-                if ($interval->m > 2) {
+                if ($interval->m > 3) {
                     $status = "Red";
                 }
-                else if ($interval->m > 1) {
+                else if ($interval->m > 2) {
                     $status = "Orange";
                 }
-                else if ($interval->m > 0) {
+                else if ($interval->m > 1) {
                     $status = "Yellow";
                 }
                 else $status ="Green";
@@ -92,7 +92,7 @@ global $path;
   <tr class="feed_id_row<?php echo $myfeedsum['feed_id']; ?>" style="display:none">
     <td><b></b></td>
     <td><b><?php echo $myfeedsumlist['summary_type']; ?></b></td>
-    <td><b>Last Updated : <?php echo $myfeedsumlist['summary_date']; ?></b></td>
+    <td><b>Last Updated : <?php echo date("d-m-Y", strtotime($myfeedsumlist['summary_date'])); ?></b></td>
     <td><div style="background-color: <?=getProperColor($status) ?>;"><b>Status :  <?php echo $status; ?></b></td>
      <td><a href="<?php echo $path; ?>summary/update?summaryid=<?php echo $myfeedsum['feed_id']; ?>&summary_date=<?php echo $myfeedsumlist['summary_date']; ?>&summary_type=<?php echo $myfeedsumlist['summary_type']; ?>&summary_name=<?php echo $myfeedsum['feed_name']; ?>" class="updatesummary btn btn-info" style="display:  <?=getUpdateStatus($status) ?>;">
             Update</a></td>
@@ -104,7 +104,10 @@ global $path;
     <td><b></b></td>
     <td><b></b></td>
     <td><b></b></td>
-    <td> <a href="<?php echo $path; ?>summary/deletesum?summaryid=<?php echo $myfeedsum['feed_id']; ?>&summary_tag=<?php echo $myfeedsum['summary_tag']; ?>&feed_name=<?php echo $myfeedsum['feed_name']; ?>"  class="deletesummary btn btn-info">Delete</a></td>
+   <td><div class="deletesummary btn btn-info"
+            summaryid="<?php echo $myfeedsum['feed_id']; ?>"
+            
+        >Delete</div></td>
   </tr>
 <?php } ?>
 </table>
@@ -173,15 +176,6 @@ function getUpdateStatus($status) {
     return false;
     });
 
-    $(".viewsummary").click(function(view) {
-    var result = {};
-    var summaryid = $(this).attr("summaryid");
-    var summaryname = $(this).attr("summaryname");
-    var summarytag = $(this).attr("summarytag");
-    $.ajax({type:'GET',url:path+'summary/view.json',data:'summaryid='+summaryid+'&summaryname='+summaryname+'&summarytag='+summarytag,dataType:'json', async: false, success: function(data) {result = data;}});
-    return result;
-    });
-
     $(".managesummary").click(function(e) {
     e.preventDefault();
     var summaryid = $(this).attr("summaryid");
@@ -195,8 +189,11 @@ function getUpdateStatus($status) {
     });
     
     $(".deletesummary").click(function() {
-        $('#loader').show();
-        console.log('Delete Button Clicked');
+    $('#loader').show();
+    var summaryid = $(this).attr("summaryid");
+    $.ajax({type:'GET',url:path+'summary/deletesum.json',data:'summaryid='+summaryid,dataType:'json',success:function(a){location.reload();}});
+    return false;
+    console.log('Delete Button Clicked');
     });
 
 </script>

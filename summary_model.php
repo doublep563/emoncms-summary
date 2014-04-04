@@ -46,13 +46,13 @@ class Summary {
         else if ($summary_type == 'Weekly' ){
         $sql = "INSERT INTO feed_summary(summary_date, feed_id, feed_name, summary_type, avg, max, min, count)
             select FROM_UNIXTIME(time,'%Y-%m-%d') as myDate, '$summaryid', '$summaryname', 'Weekly', AVG(data),MAX(data),MIN(data),COUNT(*)
-            from (SELECT * from $feedid ORDER by time DESC) as temp WHERE YEARWEEK(FROM_UNIXTIME(time),7) < YEARWEEK(CURDATE(),7) AND YEARWEEK(FROM_UNIXTIME(time),7) > YEARWEEK('$summary_date',7)
+            from (SELECT * from $feedid ORDER by time ASC) as temp WHERE YEARWEEK(FROM_UNIXTIME(time),7) < YEARWEEK(CURDATE(),7) AND YEARWEEK(FROM_UNIXTIME(time),7) > YEARWEEK('$summary_date',7)
             GROUP BY YEAR(myDate), WEEK(myDate,7);";
                 }
         else if ($summary_type == 'Monthly' ){
         $sql = "INSERT INTO feed_summary(summary_date, feed_id, feed_name, summary_type, avg, max, min, count)
             select FROM_UNIXTIME(time,'%Y-%m-%d') as myDate, '$summaryid', '$summaryname', 'Monthly', AVG(data),MAX(data),MIN(data),COUNT(*)
-            from (SELECT * from $feedid ORDER by time DESC) as temp 
+            from (SELECT * from $feedid ORDER by time ASC) as temp 
             WHERE (YEAR(FROM_UNIXTIME(time)) <= YEAR(CURRENT_DATE - INTERVAL 1 MONTH)
             AND MONTH(FROM_UNIXTIME(time)) <= MONTH(CURRENT_DATE - INTERVAL 1 MONTH))
             AND DATE(FROM_UNIXTIME(time)) > '$summary_date'
@@ -157,12 +157,12 @@ class Summary {
         $result = $this -> mysqli -> query($sqldaily);
         $sqlweek = "INSERT INTO feed_summary(summary_date, feed_id, feed_name, summary_type, avg, max, min, count)
             select FROM_UNIXTIME(time,'%Y-%m-%d') as myDate, '$summaryid', '$summaryname', 'Weekly', AVG(data),MAX(data),MIN(data),COUNT(*)
-            from (SELECT * from $feedid ORDER by time DESC) as temp WHERE YEARWEEK(FROM_UNIXTIME(time),7) < YEARWEEK(CURDATE(),7)
+            from (SELECT * from $feedid ORDER by time ASC) as temp WHERE YEARWEEK(FROM_UNIXTIME(time),7) < YEARWEEK(CURDATE(),7)
             GROUP BY YEAR(myDate), WEEK(myDate,7);";
         $result1 = $this -> mysqli -> query($sqlweek);
         $sqlmonth = "INSERT INTO feed_summary(summary_date, feed_id, feed_name, summary_type, avg, max, min, count)
             select FROM_UNIXTIME(time,'%Y-%m-%d') as myDate, '$summaryid', '$summaryname', 'Monthly', AVG(data),MAX(data),MIN(data),COUNT(*)
-            from (SELECT * from $feedid ORDER by time DESC) as temp
+            from (SELECT * from $feedid ORDER by time ASC) as temp
             WHERE YEAR(FROM_UNIXTIME(time)) <= YEAR(CURRENT_DATE - INTERVAL 1 MONTH)
             AND MONTH(FROM_UNIXTIME(time)) <= MONTH(CURRENT_DATE - INTERVAL 1 MONTH)
             GROUP BY YEAR(myDate), MONTH(myDate);";

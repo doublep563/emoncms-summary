@@ -26,11 +26,11 @@ function summary_controller() {
 
         else if ($route -> action == "deletesum" && $session['write']) {
 
-            $summaryid = intval(get('feed_id'));
+            $summaryid = intval(get('summaryid'));
 
             $deletedata = $summary -> delete($summaryid);
             
-            $result = "Fed Summary Deleted";
+            $result = "Feed Summary Deleted";
             //error_log("route->action == update list" . $summaryid, 3, "/data/log/apache2/my-errors.log");
         }
         
