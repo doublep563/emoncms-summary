@@ -55,7 +55,7 @@ class Summary {
             from (SELECT * from $feedid ORDER by time ASC) as temp 
             WHERE (YEAR(FROM_UNIXTIME(time)) <= YEAR(CURRENT_DATE - INTERVAL 1 MONTH)
             AND MONTH(FROM_UNIXTIME(time)) <= MONTH(CURRENT_DATE - INTERVAL 1 MONTH))
-            AND DATE(FROM_UNIXTIME(time)) > '$summary_date'
+            AND DATE(FROM_UNIXTIME(time)) > LAST_DAY('$summary_date')
             GROUP BY YEAR(myDate), MONTH(myDate);";
                 }
         $result = $this -> mysqli -> query($sql);
@@ -64,7 +64,7 @@ class Summary {
                 SET summary_date = (SELECT max(summary_date) FROM feed_summary WHERE feed_id = '$summaryid' and summary_type = '$summary_type')
                 WHERE feed_id = '$summaryid' and summary_type = '$summary_type'";
         $result1 = $this -> mysqli -> query($sql1);
-        error_log("route->action == sql update", 3, "/data/log/apache2/my-errors.log");
+        //error_log("route->action == sql update", 3, "/data/log/apache2/my-errors.log");
     }
 
     public function get_feeds() {
