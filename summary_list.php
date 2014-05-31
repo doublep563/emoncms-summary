@@ -62,13 +62,13 @@ global $path;
             }
         else if ($myfeedsumlist['summary_type'] == 'Weekly')
             {   
-                if ($interval->d > 28) {
+                if ($interval->d > 27) {
                     $status = "Red";
                 }
-                else if ($interval->d > 21) {
+                else if ($interval->d > 20) {
                     $status = "Orange";
                 }
-                else if ($interval->d > 14) {
+                else if ($interval->d > 13) {
                     $status = "Yellow";
                 }
                 else $status ="Green";              
@@ -92,7 +92,11 @@ global $path;
   <tr class="feed_id_row<?php echo $myfeedsum['feed_id']; ?>" style="display:none">
     <td><b></b></td>
     <td><b><?php echo $myfeedsumlist['summary_type']; ?></b></td>
-    <td><b>Last Updated : <?php echo date("d-m-Y", strtotime($myfeedsumlist['summary_date'])); ?></b></td>
+    <td><b>Last Updated : <?php
+    if ($myfeedsumlist['summary_type'] == 'Monthly')
+        {echo date("F Y", strtotime($myfeedsumlist['summary_date'])); }
+        else echo date("d-m-Y", strtotime($myfeedsumlist['summary_date'])); 
+    ?></b></td>
     <td><div style="background-color: <?=getProperColor($status) ?>;"><b>Status :  <?php echo $status; ?></b></td>
      <td><a href="<?php echo $path; ?>summary/update?summaryid=<?php echo $myfeedsum['feed_id']; ?>&summary_date=<?php echo $myfeedsumlist['summary_date']; ?>&summary_type=<?php echo $myfeedsumlist['summary_type']; ?>&summary_name=<?php echo $myfeedsum['feed_name']; ?>" class="updatesummary btn btn-info" style="display:  <?=getUpdateStatus($status) ?>;">
             Update</a></td>

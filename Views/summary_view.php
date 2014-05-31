@@ -117,7 +117,7 @@ global $path;
              spline: {
             states: {
             hover: {
-            lineWidth: 5
+            lineWidth: 3
             }
         },
         marker: {
@@ -143,7 +143,8 @@ global $path;
         var seriesAverages = {
         name: 'Average',
         data: averages,
-        type: 'column',
+        type: 'spline',
+		lineWidth: 7,
         color: '#7798BF'
 
         }
@@ -227,7 +228,8 @@ global $path;
         var seriesAverages = {
             name : 'Average',
             data : averages,
-            type: 'column',
+			type: 'spline',
+			lineWidth: 7,
             color : '#7798BF'
         }
 
@@ -239,7 +241,7 @@ global $path;
         }
 
         var seriesMaximums = {
-            name : 'Minimum',
+            name : 'Maximum',
             data : maximums,
             type : 'spline',
             color : '#DF5353'
